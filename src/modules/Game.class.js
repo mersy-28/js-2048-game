@@ -46,7 +46,10 @@ class Game {
   }
 
   restart() {
-    this.board = this._empty(); // Reset to empty board
+    /**
+     * Restores the initial state (including custom initial board).
+     */
+    this.board = this._clone(this.initialState);
     this.score = 0;
     this.status = 'idle';
 
