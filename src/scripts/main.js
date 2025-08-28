@@ -16,26 +16,105 @@
   const msgWin = document.querySelector('.message-win');
   const msgLose = document.querySelector('.message-lose');
 
+  // Track previous state to detect changes
+  let previousState = null;
+  let previousScore = 0;
+
+  // Helper function to handle animation cleanup
+  function cleanupAnimations() {
+    cells.forEach((cell) => {
+      cell.classList.remove('new-tile', 'merge-tile', 'move-tile');
+    });
+  }
+
   function render() {
     const state = game.getState();
+    const isFirstRender = previousState === null;
+
+    // Clean up previous animations
+    setTimeout(cleanupAnimations, 300);
 
     for (let r = 0; r < 4; r += 1) {
       for (let c = 0; c < 4; c += 1) {
         const i = r * 4 + c;
         const cell = cells[i];
         const val = state[r][c];
+        const prevVal = isFirstRender
+          ? 0
+          : previousState && previousState[r] && previousState[r][c];
 
+        // Remove old classes
         cell.className = 'field-cell';
         cell.textContent = val ? String(val) : '';
+        // Add data attribute for CSS styling
+        cell.setAttribute('data-value', val ? String(val) : '');
 
         if (val) {
+          // Add value class
           cell.classList.add(`field-cell--${val}`);
+
+          // Add animation classes
+          if (!isFirstRender) {
+            if (prevVal === 0 && val !== 0) {
+              // Remove any existing animation class
+              cell.classList.remove('merge-tile');
+              cell.classList.remove('move-tile');
+
+              // Add new tile animation class
+              // Force reflow to ensure animation plays
+              void cell.offsetWidth;
+              cell.classList.add('new-tile');
+            } else if (prevVal !== 0 && val === prevVal * 2) {
+              // Remove any existing animation class
+              cell.classList.remove('new-tile');
+              cell.classList.remove('move-tile');
+
+              // Add merge animation class
+              void cell.offsetWidth;
+              cell.classList.add('merge-tile');
+            } else if (prevVal !== val && prevVal !== 0 && val !== 0) {
+              // Remove any existing animation class
+              cell.classList.remove('new-tile');
+              cell.classList.remove('merge-tile');
+
+              // Add move animation class
+              void cell.offsetWidth;
+              cell.classList.add('move-tile');
+            }
+          }
         }
       }
     }
 
+    // Store current state for next render comparison
+    previousState = JSON.parse(JSON.stringify(state));
+
     // Handle score
     const score = game.getScore();
+
+    // Animate score changes
+    if (score > previousScore && !isFirstRender) {
+      // Remove any existing score animations
+      Array.from(scoreEl.querySelectorAll('.score-addition')).forEach((el) => {
+        el.parentNode.removeChild(el);
+      });
+
+      const addition = document.createElement('div');
+
+      addition.className = 'score-addition';
+      addition.textContent = '+' + (score - previousScore);
+
+      scoreEl.appendChild(addition);
+
+      // Remove the element after animation completes
+      setTimeout(() => {
+        if (addition.parentNode) {
+          addition.parentNode.removeChild(addition);
+        }
+      }, 600);
+    }
+
+    previousScore = score;
 
     scoreEl.textContent = score ? String(score) : '0';
     scoreEl.value = ''; // For test compatibility
