@@ -1,3 +1,9 @@
+/**
+ * @file serve.js - Simple HTTP server for local development
+ * @author Emaan Hookey
+ * @version 1.0.0
+ * @date 2025-08-29
+ */
 const http = require('http');
 const fs = require('fs');
 const path = require('path');

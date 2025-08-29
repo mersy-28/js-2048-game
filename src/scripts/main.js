@@ -1,3 +1,9 @@
+/**
+ * @file main.js - Main browser interface for the 2048 game
+ * @author Emaan Hookey
+ * @version 1.0.0
+ * @date 2025-08-29
+ */
 'use strict';
 
 /* Browser wiring (Game.class.js also assigns window.Game) */

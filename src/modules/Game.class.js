@@ -1,3 +1,9 @@
+/**
+ * @file Game.class.js - 2048 Game core logic implementation
+ * @author Emaan Hookey
+ * @version 1.0.0
+ * @date 2025-08-29
+ */
 'use strict';
 
 /**
