@@ -4,16 +4,14 @@
   "description": "2048 game",
   "keywords": [],
   "author": "Emaan Hookey",
-  "license": "GPL-3.0",
+  "license": "UNLICENSED",
   "scripts": {
     "start": "node serve.js",
-    "format": "prettier --ignore-path .prettierignore --write './src/**/*.{html,css,scss,js}'",
     "build": "parcel build src/index.html"
   },
   "devDependencies": {
     "@parcel/transformer-sass": "^2.12.0",
-    "parcel": "^2.12.0",
-    "prettier": "^3.3.2"
+    "parcel": "^2.12.0"
   },
   "browserslist": [
     "last 2 versions"
